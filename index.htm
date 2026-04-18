@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Grooming Master | Platon Games</title>
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.2);
+            --border: rgba(255, 255, 255, 0.3);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            touch-action: none;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Character Selection */
+        #selection-screen {
+            position: absolute;
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); margin-bottom: 30px; }
+
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .char-btn {
+            background: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .char-btn:hover { transform: scale(1.05); background: #f8f8f8; }
+
+        /* Game UI */
+        #game-ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .score-box {
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+            padding: 10px 20px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Character Display */
+        #character-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        /* Comb Cursor */
+        #comb {
+            position: fixed;
+            width: 80px;
+            height: auto;
+            pointer-events: none;
+            z-index: 90;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        /* Particles */
+        .hair {
+            position: fixed;
+            pointer-events: none;
+            z-index: 40;
+            width: 4px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        /* Screamer */
+        #screamer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 200;
+            background: black;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #screamer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shake {
+            animation: shake 0.1s infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 12px;
+            color: #666;
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="game-ui">
+        <div class="score-box">Очки: <span id="score">0</span></div>
+    </div>
+
+    <img id="character-img" src="" alt="Hero">
+    
+    <img id="comb" src="Comb.png" alt="Comb">
+
+    <div id="screamer">
+        <img id="screamer-img" src="" alt="SCREAM">
+    </div>
+
+    <div id="selection-screen">
+        <div class="menu-card">
+            <h1>Обери героя для догляду</h1>
+            <div class="char-grid">
+                <button class="char-btn" onclick="startGame('Tito')">Тіто</button>
+                <button class="char-btn" onclick="startGame('Smartik')">Смартик</button>
+                <button class="char-btn" onclick="startGame('Junior')">Джуніор</button>
+                <button class="char-btn" onclick="startGame('Fil')">Філ</button>
+                <button class="char-btn" onclick="startGame('Milka')">Мілка</button>
+                <button class="char-btn" onclick="startGame('Bark')">Барк</button>
+            </div>
+        </div>
+        <footer>Author: Platon | Platon Games v6.7</footer>
+    </div>
+</div>
+
+<audio id="snd-rock" src="Rock.mp3"></audio>
+<audio id="snd-scream" src="Scream.mp3"></audio>
+
+<script>
+    const config = {
+        Tito: { hair: ['#000000'] },
+        Smartik: { hair: ['#D2691E', '#FFD700'] },
+        Junior: { hair: ['#808080'] },
+        Fil: { hair: ['#FFFFFF'] },
+        Milka: { hair: ['#FFA500', '#000000', '#FFFFFF'] },
+        Bark: { hair: ['#808080'] }
+    };
+
+    let currentHero = '';
+    let score = 0;
+    let isLooking = false;
+    let canBeCaught = false;
+    let gameActive = false;
+    let lookTimer;
+    let reactionTimer;
+    let turnFrequency = 5000;
+    let lastX = 0;
+    let lastY = 0;
+
+    const charImg = document.getElementById('character-img');
+    const comb = document.getElementById('comb');
+    const scoreText = document.getElementById('score');
+    const screamer = document.getElementById('screamer');
+    const screamerImg = document.getElementById('screamer-img');
+    const rockSnd = document.getElementById('snd-rock');
+    const screamSnd = document.getElementById('snd-scream');
+
+    function startGame(hero) {
+        currentHero = hero;
+        document.getElementById('selection-screen').style.display = 'none';
+        charImg.src = `${hero}.png`;
+        comb.style.display = 'block';
+        gameActive = true;
+        scheduleLook();
+    }
+
+    // Рух курсора/пальця
+    function handleMove(e) {
+        if (!gameActive) return;
+
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+
+        comb.style.left = x + 'px';
+        comb.style.top = y + 'px';
+
+        // Перевірка руху для нарахування очок
+        const dist = Math.hypot(x - lastX, y - lastY);
+        if (dist > 2) {
+            if (isLooking && canBeCaught) {
+                gameOver();
+            } else if (!isLooking) {
+                score += 0.2;
+                scoreText.innerText = Math.floor(score);
+                createHair(x, y);
+            }
+        }
+        lastX = x;
+        lastY = y;
+    }
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('touchmove', handleMove);
+
+    function createHair(x, y) {
+        const h = document.createElement('div');
+        h.className = 'hair';
+        const colors = config[currentHero].hair;
+        h.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        h.style.left = x + 'px';
+        h.style.top = y + 'px';
+        h.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        document.body.appendChild(h);
+
+        const animX = (Math.random() - 0.5) * 100;
+        const animY = Math.random() * 100 + 50;
+
+        h.animate([
+            { transform: `translate(0,0) rotate(0deg)`, opacity: 1 },
+            { transform: `translate(${animX}px, ${animY}px) rotate(720deg)`, opacity: 0 }
+        ], {
+            duration: 1000,
+            easing: 'ease-out'
+        }).onfinish = () => h.remove();
+    }
+
+    function scheduleLook() {
+        if (!gameActive) return;
+        
+        const time = Math.random() * turnFrequency + 2000;
+        lookTimer = setTimeout(() => {
+            turnToPlayer();
+        }, time);
+    }
+
+    function turnToPlayer() {
+        isLooking = true;
+        charImg.src = `${currentHero}2.png`;
+        rockSnd.play();
+
+        // 1.5 секунди на реакцію
+        canBeCaught = false;
+        reactionTimer = setTimeout(() => {
+            canBeCaught = true;
+        }, 1500);
+
+        // Повертається назад через 2-3 секунди
+        setTimeout(() => {
+            if (gameActive) {
+                isLooking = false;
+                canBeCaught = false;
+                charImg.src = `${currentHero}.png`;
+                turnFrequency = Math.max(1000, turnFrequency - 300); // Складність зростає
+                scheduleLook();
+            }
+        }, 2000 + Math.random() * 1500);
+    }
+
+    function gameOver() {
+        gameActive = false;
+        clearTimeout(lookTimer);
+        clearTimeout(reactionTimer);
+        
+        // Візуалізація скрімеру
+        screamerImg.src = `${currentHero}3.png`;
+        screamer.style.display = 'flex';
+        document.body.classList.add('shake');
+        screamSnd.play();
+
+        setTimeout(() => {
+            location.reload(); // Перезапуск через 3 секунди
+        }, 3500);
+    }
+</script>
+
+</body>
+</html>
