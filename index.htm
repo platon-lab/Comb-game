@@ -33,6 +33,47 @@
             align-items: center;
         }
 
+        /* Loading Screen */
+        #loader-screen {
+            position: absolute;
+            z-index: 200;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .loader-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            width: 300px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #2ecc71;
+            transition: width 0.1s ease;
+        }
+
         /* Character Selection */
         #selection-screen {
             position: absolute;
@@ -54,22 +95,31 @@
             padding: 40px;
             box-shadow: var(--shadow);
             text-align: center;
+            max-height: 80vh;
+            overflow-y: auto;
+            max-width: 90%;
         }
 
         h1 { color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); margin-bottom: 30px; }
 
         .char-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .char-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .char-btn {
             background: white;
             border: none;
-            padding: 15px 25px;
+            padding: 15px 20px;
             border-radius: 12px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
@@ -178,6 +228,17 @@
 </head>
 <body>
 
+<!-- Loader Screen -->
+<div id="loader-screen">
+    <div class="loader-box">
+        <h2 style="margin: 0 0 10px 0;">Завантаження гри...</h2>
+        <div id="loader-text">0%</div>
+        <div class="progress-bar">
+            <div id="progress-fill" class="progress-fill"></div>
+        </div>
+    </div>
+</div>
+
 <div id="game-container">
     <div id="game-ui">
         <div class="score-box">Очки: <span id="score">0</span></div>
@@ -191,16 +252,33 @@
         <img id="screamer-img" src="" alt="SCREAM">
     </div>
 
-    <div id="selection-screen">
+    <div id="selection-screen" style="display: none;">
         <div class="menu-card">
             <h1>Обери героя для догляду</h1>
             <div class="char-grid">
+                <!-- Старі герої -->
                 <button class="char-btn" onclick="startGame('Tito')">Тіто</button>
                 <button class="char-btn" onclick="startGame('Smartik')">Смартик</button>
                 <button class="char-btn" onclick="startGame('Junior')">Джуніор</button>
                 <button class="char-btn" onclick="startGame('Fil')">Філ</button>
                 <button class="char-btn" onclick="startGame('Milka')">Мілка</button>
                 <button class="char-btn" onclick="startGame('Bark')">Барк</button>
+                
+                <!-- Нові 14 героїв -->
+                <button class="char-btn" onclick="startGame('Persik')">Персик</button>
+                <button class="char-btn" onclick="startGame('Spike')">Спайк</button>
+                <button class="char-btn" onclick="startGame('Alyonka')">Альонка</button>
+                <button class="char-btn" onclick="startGame('Lilu')">Лілу</button>
+                <button class="char-btn" onclick="startGame('Manya')">Маня</button>
+                <button class="char-btn" onclick="startGame('Liza')">Ліза</button>
+                <button class="char-btn" onclick="startGame('Grivna')">Гривня</button>
+                <button class="char-btn" onclick="startGame('Ben')">Бен</button>
+                <button class="char-btn" onclick="startGame('Goldi')">Голді</button>
+                <button class="char-btn" onclick="startGame('Raf')">Раф</button>
+                <button class="char-btn" onclick="startGame('Veles')">Велес</button>
+                <button class="char-btn" onclick="startGame('Masha')">Маша</button>
+                <button class="char-btn" onclick="startGame('Brilliantik')">Брілліантік</button>
+                <button class="char-btn" onclick="startGame('Richik')">Річік</button>
             </div>
         </div>
         <footer>Author: Platon | Platon Games v6.7</footer>
@@ -217,7 +295,22 @@
         Junior: { hair: ['#808080'] },
         Fil: { hair: ['#FFFFFF'] },
         Milka: { hair: ['#FFA500', '#000000', '#FFFFFF'] },
-        Bark: { hair: ['#808080'] }
+        Bark: { hair: ['#808080'] },
+        // Конфігурація для нових героїв
+        Persik: { hair: ['#FFCC99', '#FFA07A'] },
+        Spike: { hair: ['#4682B4', '#333333'] },
+        Alyonka: { hair: ['#FFB6C1', '#FF69B4'] },
+        Lilu: { hair: ['#E6E6FA', '#DA70D6'] },
+        Manya: { hair: ['#CD853F', '#8B4513'] },
+        Liza: { hair: ['#FFF0F5', '#FF1493'] },
+        Grivna: { hair: ['#228B22', '#85BB65'] },
+        Ben: { hair: ['#708090', '#2F4F4F'] },
+        Goldi: { hair: ['#FFD700', '#FFA500'] },
+        Raf: { hair: ['#D3D3D3', '#A9A9A9'] },
+        Veles: { hair: ['#4B0082', '#8A2BE2'] },
+        Masha: { hair: ['#FFE4E1', '#FFC0CB'] },
+        Brilliantik: { hair: ['#00FFFF', '#7FFFD4', '#1E90FF'] },
+        Richik: { hair: ['#3E2723', '#5D4037'] }
     };
 
     let currentHero = '';
@@ -231,6 +324,10 @@
     let lastX = 0;
     let lastY = 0;
 
+    // Спеціальний трекер для Брілліантік
+    let brilliantikStage = 1;
+    let brilliantikTimerActive = false;
+
     const charImg = document.getElementById('character-img');
     const comb = document.getElementById('comb');
     const scoreText = document.getElementById('score');
@@ -239,13 +336,80 @@
     const rockSnd = document.getElementById('snd-rock');
     const screamSnd = document.getElementById('snd-scream');
 
+    // Перелік усіх картинок для попереднього завантаження (Preloader)
+    const imagesToPreload = [
+        'Comb.png',
+        'Tito.png', 'Tito2.png', 'Tito3.png',
+        'Smartik.png', 'Smartik2.png', 'Smartik3.png',
+        'Junior.png', 'Junior2.png', 'Junior3.png',
+        'Fil.png', 'Fil2.png', 'Fil3.png',
+        'Milka.png', 'Milka2.png', 'Milka3.png',
+        'Bark.png', 'Bark2.png', 'Bark3.png',
+        'Persik.png', 'Persik2.png', 'Persik3.png',
+        'Spike.png', 'Spike2.png', 'Spike3.png',
+        'Alyonka.png', 'Alyonka2.png', 'Alyonka3.png',
+        'Lilu.png', 'Lilu2.png', 'Lilu3.png',
+        'Manya.png', 'Manya2.png', 'Manya3.png',
+        'Liza.png', 'Liza2.png', 'Liza3.png',
+        'Grivna.png', 'Grivna2.png', 'Grivna3.png',
+        'Ben.png', 'Ben2.png', 'Ben3.png',
+        'Goldi.png', 'Goldi2.png', 'Goldi3.png',
+        'Raf.png', 'Raf2.png', 'Raf3.png',
+        'Veles.png', 'Veles2.png', 'Veles3.png',
+        'Masha.png', 'Masha2.png', 'Masha3.png',
+        'Brilliantik.png', 'Brilliantik2.png', 'Brilliantik3.png',
+        'Richik.png', 'Richik2.png', 'Richik3.png'
+    ];
+
+    // Функція запуску Preloader-а
+    function preloadImages() {
+        let loadedCount = 0;
+        const totalImages = imagesToPreload.length;
+        const fill = document.getElementById('progress-fill');
+        const text = document.getElementById('loader-text');
+
+        imagesToPreload.forEach(src => {
+            const img = new Image();
+            img.src = src;
+            img.onload = img.onerror = () => {
+                loadedCount++;
+                const percent = Math.floor((loadedCount / totalImages) * 100);
+                fill.style.width = percent + '%';
+                text.innerText = percent + '%';
+
+                if (loadedCount === totalImages) {
+                    setTimeout(() => {
+                        document.getElementById('loader-screen').style.display = 'none';
+                        document.getElementById('selection-screen').style.display = 'flex';
+                    }, 500);
+                }
+            };
+        });
+    }
+
+    // Запускаємо завантаження при старті сторінки
+    window.onload = preloadImages;
+
     function startGame(hero) {
         currentHero = hero;
         document.getElementById('selection-screen').style.display = 'none';
-        charImg.src = `${hero}.png`;
+        
+        // Виняток для рибки Brilliantik
+        if (currentHero === 'Brilliantik') {
+            brilliantikStage = 1;
+            brilliantikTimerActive = false;
+            charImg.src = 'Brilliantik.png';
+        } else {
+            charImg.src = `${hero}.png`;
+        }
+        
         comb.style.display = 'block';
         gameActive = true;
-        scheduleLook();
+
+        // Для Брілліантік стандартний таймер обертання не потрібен
+        if (currentHero !== 'Brilliantik') {
+            scheduleLook();
+        }
     }
 
     // Рух курсора/пальця
@@ -261,12 +425,37 @@
         // Перевірка руху для нарахування очок
         const dist = Math.hypot(x - lastX, y - lastY);
         if (dist > 2) {
-            if (isLooking && canBeCaught) {
-                gameOver();
-            } else if (!isLooking) {
+            if (currentHero === 'Brilliantik') {
+                // Особлива логіка розчісування Brilliantik
                 score += 0.2;
                 scoreText.innerText = Math.floor(score);
                 createHair(x, y);
+
+                if (brilliantikStage === 1) {
+                    brilliantikStage = 2;
+                    charImg.src = 'Brilliantik2.png';
+                } else if (brilliantikStage === 2) {
+                    brilliantikStage = 3;
+                    charImg.src = 'Brilliantik3.png';
+                    
+                    // Повернення в начало після 3 секунд без скрімера
+                    if (!brilliantikTimerActive) {
+                        brilliantikTimerActive = true;
+                        gameActive = false; // блокуємо подальші дії
+                        setTimeout(() => {
+                            location.reload();
+                        }, 3000);
+                    }
+                }
+            } else {
+                // Стандартна логіка для інших героїв
+                if (isLooking && canBeCaught) {
+                    gameOver();
+                } else if (!isLooking) {
+                    score += 0.2;
+                    scoreText.innerText = Math.floor(score);
+                    createHair(x, y);
+                }
             }
         }
         lastX = x;
