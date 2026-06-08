@@ -271,7 +271,7 @@
                 <button class="char-btn" onclick="startGame('Lilu')">Лілу</button>
                 <button class="char-btn" onclick="startGame('Manya')">Маня</button>
                 <button class="char-btn" onclick="startGame('Liza')">Ліза</button>
-                <button class="char-btn" onclick="startGame('Grivna')">Гривна</button>
+                <button class="char-btn" onclick="startGame('Grivna')">Гривня</button>
                 <button class="char-btn" onclick="startGame('Ben')">Бен</button>
                 <button class="char-btn" onclick="startGame('Goldi')">Голді</button>
                 <button class="char-btn" onclick="startGame('Raf')">Раф</button>
@@ -279,6 +279,10 @@
                 <button class="char-btn" onclick="startGame('Masha')">Маша</button>
                 <button class="char-btn" onclick="startGame('Brilliantik')">Брілліантік</button>
                 <button class="char-btn" onclick="startGame('Richik')">Річік</button>
+
+                <!-- НАЙНОВІШІ ГЕРОЇ -->
+                <button class="char-btn" onclick="startGame('Shunya')">Шуня</button>
+                <button class="char-btn" onclick="startGame('Baks')">Бакс</button>
             </div>
         </div>
         <footer>Author: Platon | Platon Games v6.7</footer>
@@ -310,7 +314,11 @@
         Veles: { hair: ['#4B0082', '#8A2BE2'] },
         Masha: { hair: ['#FFE4E1', '#FFC0CB'] },
         Brilliantik: { hair: ['#00FFFF', '#7FFFD4', '#1E90FF'] },
-        Richik: { hair: ['#3E2723', '#5D4037'] }
+        Richik: { hair: ['#3E2723', '#5D4037'] },
+        
+        // Додані Shunya та Baks
+        Shunya: { hair: ['#FFD700', '#FFF8DC'] },
+        Baks: { hair: ['#85BB65', '#228B22'] }
     };
 
     let currentHero = '';
@@ -358,7 +366,11 @@
         'Veles.png', 'Veles2.png', 'Veles3.png',
         'Masha.png', 'Masha2.png', 'Masha3.png',
         'Brilliantik.png', 'Brilliantik2.png', 'Brilliantik3.png',
-        'Richik.png', 'Richik2.png', 'Richik3.png'
+        'Richik.png', 'Richik2.png', 'Richik3.png',
+        
+        // Картинки для Shunya та Baks
+        'Shunya.png', 'Shunya2.png', 'Shunya3.png',
+        'Baks.png', 'Baks2.png', 'Baks3.png'
     ];
 
     // Функція запуску Preloader-а
